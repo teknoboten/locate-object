@@ -96,8 +96,8 @@ function textToCSV(inputFilePath, outputFilePath, templateColumns) {
 
 
 //Create a CSV from a text file 
-const templateColumns = ['Item Name', 'Variation Name', 'SKU', 'GTIN', 'Vendor Code', 'Notes', 'Qty', 'Unit Cost'];
-textToCSV('data.txt', 'output.csv', templateColumns);
+// const templateColumns = ['Item Name', 'Variation Name', 'SKU', 'GTIN', 'Vendor Code', 'Notes', 'Qty', 'Unit Cost'];
+// textToCSV('data.txt', 'output.csv', templateColumns);
 
 let poItems = [];
 let currentLibrary = [];
@@ -120,4 +120,4 @@ async function compareAndFilter() {
 
 }
 
-setTimeout(compareAndFilter, 4000)
+setTimeout(compareAndFilter, 6000)
