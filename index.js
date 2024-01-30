@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const csv = require('csv-parser');
 
-
 function textToCSV(inputFilePath, outputFilePath, templateColumns) {
     fs.readFile(inputFilePath, 'utf8', (err, data) => {
       if (err) {
@@ -18,7 +17,7 @@ function textToCSV(inputFilePath, outputFilePath, templateColumns) {
   
       // Process each set of lines as a single item
       for (let i = 0; i < lines.length; i += 5) {
-        if (lines[i].trim()) {  // Check if the line is not empty
+        if (lines[i].trim()) { // Check if the line is not empty
           // Create a map of values from the data
           const itemDataMap = {
             'GTIN': lines[i].trim(),
@@ -29,26 +28,76 @@ function textToCSV(inputFilePath, outputFilePath, templateColumns) {
           };
   
           // Generate the CSV line based on the template columns
-          const itemData = templateColumns.map(column => itemDataMap[column] || '');
+          const itemData = templateColumns.map(column => {
+            if (column === 'Item Name') {
+              // If the column is 'Item Name', surround the value with double quotes
+              return `"${itemDataMap[column] || ''}"`;
+            }
+            return itemDataMap[column] || '';
+          });
   
           // Combine the item data into a single CSV line
           csvLines.push(itemData.join(','));
         }
       }
   
-      // Join all lines with a newline character to form the CSV content
-      const csvContent = csvLines.join('\n');
-  
-      // Write the CSV content to a new file
-      fs.writeFile(outputFilePath, csvContent, 'utf8', err => {
+      // Write the CSV lines to the output file
+      fs.writeFile(outputFilePath, csvLines.join('\n'), 'utf8', (err) => {
         if (err) {
           console.error('Error writing the CSV file:', err);
         } else {
-          console.log('CSV file was created successfully:', outputFilePath);
+          console.log('CSV file written successfully.');
         }
       });
     });
   }
+  
+// function textToCSV(inputFilePath, outputFilePath, templateColumns) {
+//     fs.readFile(inputFilePath, 'utf8', (err, data) => {
+//       if (err) {
+//         console.error('Error reading the file:', err);
+//         return;
+//       }
+  
+//       // Split the file into lines
+//       const lines = data.split('\n');
+  
+//       // Initialize an array to hold the CSV lines
+//       const csvLines = [templateColumns.join(',')]; // Use the template columns as the header
+  
+//       // Process each set of lines as a single item
+//       for (let i = 0; i < lines.length; i += 5) {
+//         if (lines[i].trim()) {  // Check if the line is not empty
+//           // Create a map of values from the data
+//           const itemDataMap = {
+//             'GTIN': lines[i].trim(),
+//             'Item Name': lines[i + 1]?.trim(),
+//             'Qty': lines[i + 2]?.trim(),
+//             'Unit Cost': lines[i + 3]?.trim()
+//             // Add more fields here if they are available in the data
+//           };
+  
+//           // Generate the CSV line based on the template columns
+//           const itemData = templateColumns.map(column => itemDataMap[column] || '');
+  
+//           // Combine the item data into a single CSV line
+//           csvLines.push(itemData.join(','));
+//         }
+//       }
+  
+//       // Join all lines with a newline character to form the CSV content
+//       const csvContent = csvLines.join('\n');
+  
+//       // Write the CSV content to a new file
+//       fs.writeFile(outputFilePath, csvContent, 'utf8', err => {
+//         if (err) {
+//           console.error('Error writing the CSV file:', err);
+//         } else {
+//           console.log('CSV file was created successfully:', outputFilePath);
+//         }
+//       });
+//     });
+//   }
 
   // Function to read a CSV file and return its data
   function readCSV(filePath) {
@@ -96,8 +145,8 @@ function textToCSV(inputFilePath, outputFilePath, templateColumns) {
 
 
 //Create a CSV from a text file 
-// const templateColumns = ['Item Name', 'Variation Name', 'SKU', 'GTIN', 'Vendor Code', 'Notes', 'Qty', 'Unit Cost'];
-// textToCSV('data.txt', 'output.csv', templateColumns);
+const templateColumns = ['Item Name', 'Variation Name', 'SKU', 'GTIN', 'Vendor Code', 'Notes', 'Qty', 'Unit Cost'];
+textToCSV('data.txt', 'output.csv', templateColumns);
 
 let poItems = [];
 let currentLibrary = [];
@@ -120,4 +169,4 @@ async function compareAndFilter() {
 
 }
 
-setTimeout(compareAndFilter, 6000)
+setTimeout(compareAndFilter, 2000)
