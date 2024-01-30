@@ -1,8 +1,4 @@
-*create something to work with*
-- save PO to data.txt
-- run make-csv.js -> output.csv
+# locate objects
 
-*add missing items*
-- download latest catalogue (currentcat.csv)
-- run find-missing.js -> new_items.csv
-    
+some very basic tools to do spreadsheet magic. fear my javascript skillz.
+
